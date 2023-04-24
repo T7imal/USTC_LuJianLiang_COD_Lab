@@ -1,5 +1,5 @@
 INPUT:	lb a5, 0x00007f00
-	beq a5, x0, INPUT
+	beq a5, x0, INPUT	#轮询
 	lw a0, 0x00007f04
 	addi a0, a0, -10	#判断是否为回车
 	beq a0, x0, FLS
@@ -20,17 +20,25 @@ LOOP:	beq t0, x0, EXIT
 	addi a1, x0, 8		#输出8次，每次1位
 	addi a2, x0, 0
 OUTPUT:	lb a5, 0x00007f08
-	beq a5, x0, OUTPUT
+	beq a5, x0, OUTPUT	#轮询
 	sll a6, t2, a2		#左移a2位
 	srli a6, a6, 28		#右移(7*4)位，取出对应位
-	addi a3, x0, 58		#提供对比，区分0-9和a-f
+	addi a2, a2, 4
+	addi a1, a1, -1
+	beq a6, x0, OUTPUT
+	bne a6, x0, NOTZERO
+LOOP2:	lb a5, 0x00007f08
+	beq a5, x0, OUTPUT	#轮询
+	sll a6, t2, a2		#左移a2位
+	srli a6, a6, 28		#右移(7*4)位，取出对应位
+	addi a2, a2, 4		#若放在NOTZERO之后，会导致a2+=4;和a1-=1;被执行9次
+	addi a1, a1, -1
+NOTZERO:	addi a3, x0, 58		#提供对比，区分0-9和a-f
 	addi a6, a6, 48		#将0-9转换为对应ascii码
 	blt a6, a3, NEXT
 	addi a6, a6, 7		#将a-f转换为对应ascii码
 NEXT:	sw a6, 0x00007f0c, a0
-	addi a1, a1, -1
-	addi a2, a2, 4
-	bne a1, x0, OUTPUT
+	bne a1, x0, LOOP2
 	addi a6, x0, 10
 ENDL:	lb a5, 0x00007f08
 	beq a5, x0, ENDL

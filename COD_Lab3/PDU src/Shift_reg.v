@@ -12,8 +12,24 @@ module Shift_reg(
     
     output reg [31:0] dout  // Data output
 );
+    reg [31:0] d;
 
-    // TODO
+    always @(posedge clk) begin
+        if(rst)
+            d<=0;
+        else begin
+            if(set)
+                d<=din;
+            if(add)
+                d<={d[27:0],hex};
+            if(del)
+                d<={4'b0000, d[31:4]};
+        end 
+    end
+  
+    always @(*) begin
+        dout=d;
+    end
 
 endmodule
 

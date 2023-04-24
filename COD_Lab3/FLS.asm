@@ -10,9 +10,9 @@ INPUT:	lb a5, 0x00007f00
 	add a6, a6, t0
 	add a6, a6, t0		#记录当前输入值的10倍
 	jal x0, INPUT
-FLS:	addi t2, x0, 1
-	addi t4, x0, 1
-	li a4, 0x00000000
+FLS:	addi t2, x0, 1	#置初值
+	addi t4, x0, 1		#置初值
+	li a4, 0x00000000	#存储地址
 LOOP:	beq t0, x0, EXIT
 	addi t0, t0, -1
 	sw t1, (a4)
@@ -42,7 +42,7 @@ NEXT:	sw a6, 0x00007f0c, a0
 	addi a6, x0, 10
 ENDL:	lb a5, 0x00007f08
 	beq a5, x0, ENDL
-	sw a6, 0x00007f0c, a0
+	sw a6, 0x00007f0c, a0	#a6=10，即换行符
 	addi a4, a4, 8
 	add t6, t2, t4
 	add a7, x0, t6

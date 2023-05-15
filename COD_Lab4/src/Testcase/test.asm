@@ -1,28 +1,28 @@
 # Author: 2023_COD_TA
 # Last_edit: 20230416
-# ============================== µ¥ÖÜÆÚ CPU ÕıÈ·ĞÔ²âÊÔ³ÌĞò ==============================
-# global pointer gp Îª x3 ¼Ä´æÆ÷
-# ÔÚÎÄ¼şÖĞ gp Ö¸Ê¾µ±Ç°½øĞĞµÄ²âÊÔ
-# ÈôÁ¬ĞøÔËĞĞºópcµÄÖµÎª 0x0000301c µ½ 0x00003034£¬´ú±íFAIL£¬ÕâÊ±gpÖ¸Ê¾µÚÒ»¸öÎ´Í¨¹ıµÄ²âÊÔ
-# ÉÏ°å¿ÉÒÔ¿´µ½ led[1] ÁÁÆğ£¬´ËÊ±³ÌĞòÖ´ĞĞÒì³£
+# ============================== å•å‘¨æœŸ CPU æ­£ç¡®æ€§æµ‹è¯•ç¨‹åº ==============================
+# global pointer gp ä¸º x3 å¯„å­˜å™¨
+# åœ¨æ–‡ä»¶ä¸­ gp æŒ‡ç¤ºå½“å‰è¿›è¡Œçš„æµ‹è¯•
+# è‹¥è¿ç»­è¿è¡Œåpcçš„å€¼ä¸º 0x0000301c åˆ° 0x00003034ï¼Œä»£è¡¨FAILï¼Œè¿™æ—¶gpæŒ‡ç¤ºç¬¬ä¸€ä¸ªæœªé€šè¿‡çš„æµ‹è¯•
+# ä¸Šæ¿å¯ä»¥çœ‹åˆ° led[1] äº®èµ·ï¼Œæ­¤æ—¶ç¨‹åºæ‰§è¡Œå¼‚å¸¸
 
-# ÈôÁ¬ĞøÔËĞĞºópcµÄÖµÎª 0x0000324c µ½ 0x00003264£¬´ú±íÈ«²¿²âÊÔÍ¨¹ı
-# ÉÏ°å¿ÉÒÔ¿´µ½ led[0] ÁÁÆğ£¬´ËÊ±³ÌĞòÖ´ĞĞÕı³£
+# è‹¥è¿ç»­è¿è¡Œåpcçš„å€¼ä¸º 0x0000324c åˆ° 0x00003264ï¼Œä»£è¡¨å…¨éƒ¨æµ‹è¯•é€šè¿‡
+# ä¸Šæ¿å¯ä»¥çœ‹åˆ° led[0] äº®èµ·ï¼Œæ­¤æ—¶ç¨‹åºæ‰§è¡Œæ­£å¸¸
 
-# !!!!!!!!!!!!!!!! Çë²»ÒªĞŞ¸Ä±¾²âÊÔ³ÌĞòµÄ´úÂë !!!!!!!!!!!!!!!!!!!!!!!
+# !!!!!!!!!!!!!!!! è¯·ä¸è¦ä¿®æ”¹æœ¬æµ‹è¯•ç¨‹åºçš„ä»£ç  !!!!!!!!!!!!!!!!!!!!!!!
 # ======================================================================================
 
 
 # TEST 0 addi & beq test
-# ½¨ÒéÔÚ´Ë²âÊÔÊ±µ¥²½ÔËĞĞ ÕıÈ·½øÈëTEST1 ºóÔÙÁ¬ĞøÔËĞĞ
+# å»ºè®®åœ¨æ­¤æµ‹è¯•æ—¶å•æ­¥è¿è¡Œ æ­£ç¡®è¿›å…¥TEST1 åå†è¿ç»­è¿è¡Œ
 .text
-	addi gp, x0, 0		# gp = 1 ¼ì²âaddiÊµÏÖÓëx0ÉèÎª0
+	addi gp, x0, 0		# gp = 1 æ£€æµ‹addiå®ç°ä¸x0è®¾ä¸º0
 	addi x5, x0, 2		# x5 = 2
 	addi x6, x5, -3		# x6 = 0xffffffff
 	addi x8, x6, 1000	# x8 = 0x3e7
 	addi x7, x0, 999 	# x7 = 0x3e7
-	beq x5, x6, FAIL	# ²»Ó¦Ìø×ª
-	beq x8, x7, TEST1	# Ó¦Ìø×ª
+	beq x5, x6, FAIL	# ä¸åº”è·³è½¬
+	beq x8, x7, TEST1	# åº”è·³è½¬
 	
 FAIL:	
 	lui x7 7
@@ -31,7 +31,7 @@ FAIL:
 	addi x7 x7 0x100	# x7 = 7f00
 	addi x8 x0 1
 	sw x8 16(x7)		# led[1] = 0
-	beq x0, x0, FAIL	# Ê§°ÜÊ±»áÔÚ´Ë´¦ËÀÑ­»·
+	beq x0, x0, FAIL	# å¤±è´¥æ—¶ä¼šåœ¨æ­¤å¤„æ­»å¾ªç¯
 	
 TEST1:	# add test	
 	addi gp, x0, 1		# gp = 1
@@ -47,8 +47,8 @@ TEST2:	# add test II
 	addi gp, x0, 2		# gp = 2
 	addi x8, x0, 9 		# x8 = 9
 	add x9, x8, x0		# x9 = 9
-	addi x10, x0, -9	# x10 = 0xfffffff7
-	add x10, x9, x10	# x10 = 0
+	addi x10, x0, -9		# x10 = 0xfffffff7
+	add x10, x9, x10		# x10 = 0
 	beq x10, x0, TEST3
 	beq x0, x0, FAIL
 	
@@ -111,7 +111,7 @@ TEST8:	# blt test
 	addi gp, x0, 8		# gp = 8
 	addi x5, x0, 1		# x5 = 1
 	addi, x6, x0, 2		# x6 = 2
-	addi x28, x0, 1 	# x28 = 1 ¿ÉÍ¨¹ıx28È·¶¨ÄÄ¸ö·Ö²âÊÔÊ±Ê§°Ü
+	addi x28, x0, 1 	# x28 = 1 å¯é€šè¿‡x28ç¡®å®šå“ªä¸ªåˆ†æµ‹è¯•æ—¶å¤±è´¥
 	blt x6, x5, FAIL
 	addi x5, x5, 1		# x5 = 2
 	addi x28, x0, 2 	# x28 = 2
@@ -159,9 +159,162 @@ L5:	jalr x12, x1, 4
 	addi x6, x6, 16		# x6 = 0x31e4
 	jalr x0, x6, 0
 	beq x0, x0, FAIL	
+	
+	# ä»¥ä¸‹ä¸ºé€‰åšéƒ¨åˆ†
+TEST11:	# slli test
+	addi gp, x0, 11		# gp = 11
+	addi x5, x0, 2		# x5 = 2
+	slli x5, x5, 5		# x5 = 64
+	slli x6, x5, 2		# x6 = 256
+	addi x7, x0, 256		# x7 = 256
+	beq x6, x7, TEST12
+	beq x0, x0, FAIL
+
+TEST12:	# srli test
+	addi gp, x0, 12		# gp = 12
+	addi x5, x0, -256	# x5 = -256
+	srli x5, x5, 2		# x5 = 0x3fffffc0
+	srli x6, x5, 10		# x6 = 0x000fffff
+	srli x6, x6, 10		# x6 = 0x000003ff
+	addi x7, x0, 0x3ff	# x7 = 0x3ff
+	beq x6, x7, TEST13
+	beq x0, x0, FAIL
+
+TEST13:	# srai test
+	addi gp, x0, 13		# gp = 13
+	addi x5, x0, -256	# x5 = -256
+	srai x5, x5, 2		# x5 = -64
+	srai x6, x5, 2		# x6 = -16
+	srai x6, x6, 1		# x6 = -8
+	addi x7, x0, -8		# x7 = -8
+	beq x6, x7, TEST14
+	beq x0, x0, FAIL
+
+TEST14:	# sub test
+	addi gp, x0, 14		# gp = 14
+	addi x5, x0, 2		# x5 = 2
+	addi x6, x5, 10		# x6 = 12
+	sub x6, x6, x5		# x6 = 10
+	sub x6, x6, x5		# x6 = 8
+	addi x7, x0, 8		# x7 = 8
+	beq x6, x7, TEST15
+	beq x0, x0, FAIL
+
+TEST15:	# or and test
+	addi gp, x0, 15		# gp = 15
+	addi x5, x0, 0x6bc	# x5 = 0xabc
+	addi x6, x0, 0x111	# x6 = 0x111
+	or x6, x6, x5		# x6 = 0x7bd
+	addi x5, x0, 0x123	# x5 = 0x123
+	and x6, x6, x5		# x6 = 0x121
+	addi x7, x0, 0x121	# x7 = 0x121
+	beq x6, x7, TEST16
+	beq x0, x0, FAIL
+
+TEST16:	# bne test
+	addi gp, x0, 16		# gp = 16
+	addi x5, x0, 1		# x5 = 1
+	addi, x6, x0, 2		# x6 = 2
+	addi x28, x0, 1 	# x28 = 1 å¯é€šè¿‡x28ç¡®å®šå“ªä¸ªåˆ†æµ‹è¯•æ—¶å¤±è´¥
+	bne x6, x5, B1
+	beq x0, x0, FAIL
+B1:	
+	addi x5, x5, 2		# x5 = 3
+	addi x28, x0, 2 	# x28 = 2
+	bne x6, x5, B2
+	beq x0, x0, FAIL
+B2:	
+	addi x7, x0, -1		# x7 = 0xffffffff
+	addi x8, x0, -2		# x8 = 0xfffffffe
+	addi x28, x0, 3 	# x28 = 3
+	bne x7, x8, B3
+	beq x0, x0, FAIL
+B3:
+	addi x9, x0, 0		# x9 = 0
+	addi x28, x0, 4 	# x28 = 4
+	bne x9, x7, B4
+	beq x0, x0, FAIL
+B4:
+	addi x28, x0, 5 	# x28 = 5
+	bne x5, x9, B5
+	beq x0, x0, FAIL
+B5:
+	addi x28, x0, 6 	# x28 = 6
+	bne x7, x5, TEST17
+	beq x0, x0, FAIL
+
+TEST17:	# bge test
+	addi gp, x0, 17		# gp = 17
+	addi x5, x0, 2		# x5 = 2
+	addi, x6, x0, 1		# x6 = 1
+	addi x28, x0, 1 	# x28 = 1 å¯é€šè¿‡x28ç¡®å®šå“ªä¸ªåˆ†æµ‹è¯•æ—¶å¤±è´¥
+	bge x6, x5, FAIL
+	addi x6, x6, 1		# x6 = 2
+	addi x28, x0, 2 	# x28 = 2
+	bge x6, x5, B6
+	beq x0, x0, FAIL
+B6:	
+	addi x7, x0, -2		# x7 = 0xfffffffe
+	addi x8, x0, -1		# x8 = 0xffffffff
+	addi x28, x0, 3 	# x28 = 3
+	bge x7, x8, FAIL
+	addi x9, x0, 0		# x9 = 0
+	addi x28, x0, 4 	# x28 = 4
+	bge x7, x9, FAIL
+	addi x28, x0, 5 	# x28 = 5
+	bge x9, x5, FAIL
+	addi x28, x0, 6 	# x28 = 6
+	bge x5, x7, TEST18
+	beq x0, x0, FAIL
+
+TEST18:	# bltu test
+	addi gp, x0, 18		# gp = 18
+	addi x5, x0, 1		# x5 = 1
+	addi, x6, x0, 2		# x6 = 2
+	addi x28, x0, 1 	# x28 = 1 å¯é€šè¿‡x28ç¡®å®šå“ªä¸ªåˆ†æµ‹è¯•æ—¶å¤±è´¥
+	bltu x6, x5, FAIL
+	addi x5, x5, 1		# x5 = 2
+	addi x28, x0, 2 	# x28 = 2
+	bltu x6, x5, FAIL
+	addi x7, x0, -1		# x7 = 0xffffffff
+	addi x8, x0, -2		# x8 = 0xfffffffe
+	addi x28, x0, 3 	# x28 = 3
+	bltu x7, x8, FAIL
+	addi x9, x0, 0		# x9 = 0
+	addi x28, x0, 4 	# x28 = 4
+	bltu x7, x9, FAIL
+	addi x28, x0, 5 	# x28 = 5
+	bltu x5, x9, FAIL
+	addi x28, x0, 6 	# x28 = 6
+	bltu x5, x7, TEST19
+	beq x0, x0, FAIL
+
+TEST19:	# bgeu test
+	addi gp, x0, 19		# gp = 19
+	addi x5, x0, 2		# x5 = 2
+	addi, x6, x0, 1		# x6 = 1
+	addi x28, x0, 1 	# x28 = 1 å¯é€šè¿‡x28ç¡®å®šå“ªä¸ªåˆ†æµ‹è¯•æ—¶å¤±è´¥
+	bgeu x6, x5, FAIL
+	addi x6, x6, 1		# x6 = 2
+	addi x28, x0, 2 	# x28 = 2
+	bgeu x6, x5, B7
+	beq x0, x0, FAIL
+B7:	
+	addi x7, x0, -2		# x7 = 0xfffffffe
+	addi x8, x0, -1		# x8 = 0xffffffff
+	addi x28, x0, 3 	# x28 = 3
+	bgeu x7, x8, FAIL
+	addi x9, x0, 0		# x9 = 0
+	addi x28, x0, 4 	# x28 = 4
+	bgeu x9, x7, FAIL
+	addi x28, x0, 5 	# x28 = 5
+	bgeu x9, x5, FAIL
+	addi x28, x0, 6 	# x28 = 6
+	bgeu x7, x5, FINAL
+	beq x0, x0, FAIL
 
 FINAL:	# final test	
-	addi gp, x0, 11		# gp = 0x0b
+	addi gp, x0, 20		# gp = 20
 	addi x8, x0, 100	# x8 = 100
 	addi x5, x0, 0		# x5 = 0
 	addi x30, x30, 0	# x30 = 0
@@ -169,10 +322,10 @@ LOOP:	beq x5, x8, JMP
 	add x6, x5, x5
 	add x6, x6, x6		# x6 = 4 * x5
 	sw x5, 0(x6)	
-	addi x5, x5, 1		# Êı¾İ¶ÎÇ°100¸öÎ»ÖÃ´æ0µ½99
+	addi x5, x5, 1		# æ•°æ®æ®µå‰100ä¸ªä½ç½®å­˜0åˆ°99
 	jal x7, LOOP		
 	beq x0, x0, FAIL
-JMP:	jalr x0, x7, 12		# ÌøÖÁCOUNTÇ°Ò»¾ä
+JMP:	jalr x0, x7, 12		# è·³è‡³COUNTå‰ä¸€å¥
 	beq x0, x0, FAIL
 	addi x10, x0, 0
 COUNT:	add x11, x10, x10
@@ -180,11 +333,11 @@ COUNT:	add x11, x10, x10
 	lw x12, 0(x11)
 	add x30, x30, x12
 	addi x10, x10, 1
-	blt x10, x8, COUNT	# x30 ´¢´æ0µ½99µÄºÍ 0x1356
-	auipc x31, 0		# x31 = 0x3234
+	blt x10, x8, COUNT	# x30 å‚¨å­˜0åˆ°99çš„å’Œ 0x1356
+	auipc x31, 0		# x31 = 0x3430
 	lui x29, -2		# x29 = 0xffffe000
-	add x28, x29, x31	# x28 = 0x1234
-	addi x27, x28, 0x122	# x27 = 0x1356
+	add x28, x29, x31	# x28 = 0x1430
+	addi x27, x28, -0xda	# x27 = 0x1356
 	beq x27, x30, WIN
 	beq x0, x0, FAIL
 

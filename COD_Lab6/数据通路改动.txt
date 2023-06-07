@@ -1,0 +1,2 @@
+CTRL模块加入输出LOAD指令位宽load_type
+CTRL模块加入输出STORE指令位宽store_type

@@ -1,2 +1,22 @@
 CTRL模块加入输出LOAD指令位宽load_type
 CTRL模块加入输出STORE指令位宽store_type
+Load
+Store
+
+Hazard 模块需要的设计可以参考下面的方案：
+// 假定 WB_SEL_MEM 代表寄存器堆写回选择器选择 MEM_dout 的结果
+// 增加 rf_re0_id、rf_re1_id、rf_ra0_id、rf_ra1_id、rf_we_ex、rf_wa_ex、rf_wd_sel_ex 即可
+if (rf_we_ex && rf_re0_id && rf_wa_ex == rf_ra0_id && rf_wd_sel_ex == WB_SEL_MEM
+ || rf_we_ex && rf_re1_id && rf_wa_ex == rf_ra1_id && rf_wd_sel_ex == WB_SEL_MEM)
+    begin
+        stall_if = 1;
+        stall_id = 1;
+        flush_ex = 1;
+    end
+
+Global_Br_History
+Partical_Br_History
+GP_Competition
+BTB
+Jalr_Stack
+

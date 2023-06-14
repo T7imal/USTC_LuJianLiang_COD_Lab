@@ -2,7 +2,7 @@ module BHT (
     input clk,
     input [31:0] pc_if,
     input [31:0] pc_ex,
-    input br_inst,  //是否是br指令
+    input br_inst,  //ex阶段是否是br指令
     input br,
     output [3:0] br_history_if,
     output [3:0] br_history_ex

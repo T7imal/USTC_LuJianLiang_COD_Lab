@@ -28,40 +28,40 @@ module CPU(
     // Write your CPU here!
     // You might need to write these modules:
     //   dm_dout   ALU、RF、Control、Add(Or just add-mode ALU)、And(Or just and-mode ALU)、PCReg、Imm、Branch、Mux�?...
-    wire [31:0] pc_next, inst_raw, dm_dout, check_data_hzd, check_data, jump_addr, jalr_addr;
+    wire [31:0] pc_next, inst_raw, dm_dout, check_data_hzd, check_data, jump_addr, jalr_addr, br_num, jal_num, jalr_num, br_fail_num, jal_fail_num, jalr_fail_num;
     wire [1:0] top_fix;
-    wire br_pre, br_pre_global, br_pre_partical, gp_sel, hit, pre_failure, jalr_stack_rst;
+    wire br_pre, gp_sel, hit, pre_failure, jalr_stack_rst;
     //IF
     wire [31:0] pc_cur_if, pc_add4_if, inst_if, rf_rd0_fd, rf_rd1_fd, check_data_if;
-    wire stall_if, flush_if;
+    wire stall_if, flush_if, br_pre_global_if, br_pre_partical_if;
     //ID
     wire [31:0] pc_cur_id, inst_id, rf_rd0_raw_id, rf_rd1_raw_id, pc_add4_id, imm_id, rf_rd_dbg_id, check_data_id, jal_addr_id;
     wire [4:0] rf_ra0_id, rf_ra1_id, rf_wa_id;
     wire [3:0] alu_func_id;
     wire [2:0] imm_type_id, load_type_id, br_type_id;
     wire [1:0] rf_wd_sel_id, store_type_id;
-    wire stall_id, flush_id, rf_re0_id, rf_re1_id, rf_we_id, alu_src1_sel_id, alu_src2_sel_id, jal_id, jalr_id, dm_we_id;
+    wire stall_id, flush_id, rf_re0_id, rf_re1_id, rf_we_id, alu_src1_sel_id, alu_src2_sel_id, jal_id, jalr_id, dm_we_id, br_pre_global_id, br_pre_partical_id;
     //EX
     wire [31:0] pc_cur_ex, inst_ex, rf_rd0_raw_ex, rf_rd1_raw_ex, rf_rd0_ex, rf_rd1_ex, pc_add4_ex, imm_ex, alu_src1_ex, alu_src2_ex, alu_ans_ex, pc_jalr_ex, check_data_ex;
     wire [4:0] rf_ra0_ex, rf_ra1_ex, rf_wa_ex;
     wire [3:0] alu_func_ex;
     wire [2:0] imm_type_ex, load_type_ex, br_type_ex;
     wire [1:0] rf_wd_sel_ex, pc_sel_ex, store_type_ex;
-    wire stall_ex, flush_ex, rf_re0_ex, rf_re1_ex, rf_we_ex, alu_src1_sel_ex, alu_src2_sel_ex, jal_ex, jalr_ex, br_ex, dm_we_ex;
+    wire stall_ex, flush_ex, rf_re0_ex, rf_re1_ex, rf_we_ex, alu_src1_sel_ex, alu_src2_sel_ex, jal_ex, jalr_ex, br_ex, dm_we_ex, br_pre_global_ex, br_pre_partical_ex;
     //MEM
     wire [31:0] pc_cur_mem, inst_mem, rf_rd0_raw_mem, rf_rd1_raw_mem, rf_rd0_mem, rf_rd1_mem, pc_add4_mem, pc_br_mem, imm_mem, alu_src1_mem, alu_src2_mem, alu_ans_mem, pc_jal_mem, pc_jalr_mem, pc_next_mem, dm_addr_mem, dm_din_mem, store_data, check_data_mem;
     wire [4:0] rf_ra0_mem, rf_ra1_mem, rf_wa_mem;
     wire [3:0] alu_func_mem;
     wire [2:0] imm_type_mem, load_type_mem, br_type_mem;
     wire [1:0] rf_wd_sel_mem, pc_sel_mem, store_type_mem;
-    wire flush_mem, rf_re0_mem, rf_re1_mem, rf_we_mem, alu_src1_sel_mem, alu_src2_sel_mem, jal_mem, jalr_mem, br_mem, dm_we_mem;
+    wire flush_mem, rf_re0_mem, rf_re1_mem, rf_we_mem, alu_src1_sel_mem, alu_src2_sel_mem, jal_mem, jalr_mem, br_mem, dm_we_mem, br_pre_global_mem, br_pre_partical_mem;
     //WB
     wire [31:0] pc_cur_wb, inst_wb, rf_rd0_raw_wb, rf_rd1_raw_wb, rf_rd0_wb, rf_rd1_wb, rf_wd_wb, pc_add4_wb, pc_br_wb, imm_wb, alu_src1_wb, alu_src2_wb, alu_ans_wb, pc_jal_wb, pc_jalr_wb, pc_next_wb, dm_addr_wb, dm_din_wb, dm_dout_wb, load_data_wb, check_data_wb;
     wire [4:0] rf_ra0_wb, rf_ra1_wb, rf_wa_wb;
     wire [3:0] alu_func_wb;
     wire [2:0] imm_type_wb, load_type_wb, br_type_wb;
     wire [1:0] rf_wd_sel_wb, pc_sel_wb, store_type_wb;
-    wire rf_re0_wb, rf_re1_wb, rf_we_wb, alu_src1_sel_wb, alu_src2_sel_wb, jal_wb, jalr_wb, br_wb, dm_we_wb;
+    wire rf_re0_wb, rf_re1_wb, rf_we_wb, alu_src1_sel_wb, alu_src2_sel_wb, jal_wb, jalr_wb, br_wb, dm_we_wb, br_pre_global_wb, br_pre_partical_wb;
 
     assign inst_raw=im_dout;
     assign dm_dout=mem_dout;
@@ -169,7 +169,11 @@ module CPU(
         .load_type_in(3'h0),
         .store_type_in(2'h0),
         .load_type_out(),
-        .store_type_out()
+        .store_type_out(),
+        .br_pre_global_in(br_pre_global_if),
+        .br_pre_partical_in(br_pre_partical_if),
+        .br_pre_global_out(br_pre_global_id),
+        .br_pre_partical_out(br_pre_partical_id)
     );
 
     RF rf(
@@ -286,7 +290,11 @@ module CPU(
         .load_type_in(load_type_id),
         .store_type_in(store_type_id),
         .load_type_out(load_type_ex),
-        .store_type_out(store_type_ex)
+        .store_type_out(store_type_ex),
+        .br_pre_global_in(br_pre_global_id),
+        .br_pre_partical_in(br_pre_partical_id),
+        .br_pre_global_out(br_pre_global_ex),
+        .br_pre_partical_out(br_pre_partical_ex)
     );
 
     AND and_(
@@ -421,7 +429,11 @@ module CPU(
         .load_type_in(load_type_ex),
         .store_type_in(store_type_ex),
         .load_type_out(load_type_mem),
-        .store_type_out(store_type_mem)
+        .store_type_out(store_type_mem),
+        .br_pre_global_in(br_pre_global_ex),
+        .br_pre_partical_in(br_pre_partical_ex),
+        .br_pre_global_out(br_pre_global_mem),
+        .br_pre_partical_out(br_pre_partical_mem)
     );
 
     Store store(
@@ -508,7 +520,11 @@ module CPU(
         .load_type_in(load_type_mem),
         .store_type_in(store_type_mem),
         .load_type_out(load_type_wb),
-        .store_type_out(store_type_wb)
+        .store_type_out(store_type_wb),
+        .br_pre_global_in(br_pre_global_mem),
+        .br_pre_partical_in(br_pre_partical_mem),
+        .br_pre_global_out(br_pre_global_wb),
+        .br_pre_partical_out(br_pre_partical_wb)
     );
 
     Load load(
@@ -578,6 +594,7 @@ module CPU(
     // );
 
     NPC_SEL npc_sel(
+        .clk(clk),
         .pc_add4_if(pc_add4_if),
         .pc_jalr_ex(pc_jalr_ex),
         .alu_ans_ex(alu_ans_ex),
@@ -591,7 +608,13 @@ module CPU(
         .pc_next(pc_next),
         .pre_failure(pre_failure),
         .pc_add4_ex(pc_add4_ex),
-        .br_type_ex(br_type_ex)
+        .br_type_ex(br_type_ex),
+        .br_num(br_num),
+        .jal_num(jal_num),
+        .jalr_num(jalr_num),
+        .br_fail_num(br_fail_num),
+        .jal_fail_num(jal_fail_num),
+        .jalr_fail_num(jalr_fail_num)
     );
 
     Check_Data_SEL check_data_sel_if (
@@ -816,7 +839,7 @@ module CPU(
         .clk(clk),
         .inst_ex(inst_ex),
         .br_ex(br_ex),
-        .br_pre(br_pre_global)
+        .br_pre(br_pre_global_if)
     );
 
     Partical_Br_History partical_br_history(
@@ -825,7 +848,7 @@ module CPU(
         .pc_ex(pc_cur_ex),
         .inst_ex(inst_ex),
         .br_ex(br_ex),
-        .br_pre(br_pre_partical)
+        .br_pre(br_pre_partical_if)
     );
 
     GP_Competition gp_competition(
@@ -834,8 +857,10 @@ module CPU(
         .pc_ex(pc_cur_ex),
         .inst_ex(inst_ex),
         .inst_if(inst_if),
-        .br_pre_global(br_pre_global),
-        .br_pre_partical(br_pre_partical),
+        .br_pre_global_if(br_pre_global_if),
+        .br_pre_partical_if(br_pre_partical_if),
+        .br_pre_global_ex(br_pre_global_ex),
+        .br_pre_partical_ex(br_pre_partical_ex),
         .br(br_ex),
         .gp_sel(gp_sel),
         .br_pre(br_pre)

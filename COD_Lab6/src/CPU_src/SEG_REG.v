@@ -39,6 +39,8 @@ module SEG_REG (
     input dm_we_in,
     input [2:0] load_type_in,
     input [1:0] store_type_in,
+    input br_pre_partical_in,
+    input br_pre_global_in,
 
     output [31:0] pc_cur_out,
     output [31:0] inst_out,
@@ -76,7 +78,9 @@ module SEG_REG (
     output [31:0] dm_dout_out,
     output dm_we_out,
     output [2:0] load_type_out,
-    output [1:0] store_type_out
+    output [1:0] store_type_out,
+    output br_pre_partical_out,
+    output br_pre_global_out
 );
     reg [31:0] pc_cur;
     reg [31:0] inst;
@@ -115,6 +119,9 @@ module SEG_REG (
     reg dm_we;
     reg [2:0] load_type;
     reg [1:0] store_type;
+    reg br_pre_global;
+    reg br_pre_partical;
+
     always @(posedge clk) begin
         if(stall)begin
         end
@@ -156,6 +163,8 @@ module SEG_REG (
             dm_we <= 0;
             load_type <= 0;
             store_type <= 0;
+            br_pre_global <= 0;
+            br_pre_partical <= 0;
         end
         else begin
             pc_cur <= pc_cur_in;
@@ -195,6 +204,8 @@ module SEG_REG (
             dm_we <= dm_we_in;
             load_type <= load_type_in;
             store_type <= store_type_in;
+            br_pre_global <= br_pre_global_in;
+            br_pre_partical <= br_pre_partical_in;
         end
     end
     assign pc_cur_out = pc_cur;
@@ -234,4 +245,6 @@ module SEG_REG (
     assign dm_we_out = dm_we;
     assign load_type_out = load_type;
     assign store_type_out = store_type;
+    assign br_pre_global_out = br_pre_global;
+    assign br_pre_partical_out = br_pre_partical;
 endmodule

@@ -1,6 +1,6 @@
 module GHR (
     input clk,
-    input br_inst,  //是否是br指令
+    input br_inst,  //ex阶段是否是br指令
     input br,
     output [7:0] br_history
 );

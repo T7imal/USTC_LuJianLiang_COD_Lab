@@ -6,7 +6,7 @@ module GHR (
 );
     reg [7:0] ghr;
 
-    assign br_history= (br_inst) ? {ghr[6:0],br} : ghr; //写优�?
+    assign br_history= (br_inst) ? {ghr[6:0],br} : ghr; //写优先
     
     initial begin
         ghr=8'h0;
@@ -14,7 +14,7 @@ module GHR (
 
     always @(posedge clk) begin
         if(br_inst)
-            ghr<={ghr[6:0],br}; //移位寄存�?
+            ghr<={ghr[6:0],br}; //移位寄存器
     end
 endmodule
 
@@ -29,7 +29,7 @@ module PHT_Global (
     integer i=0;
 
     always @(*) begin
-        if(br_inst)begin    //写优�?
+        if(br_inst)begin    //写优先
             case (pht[br_history])
                 2'b00: br_pre=0;
                 2'b01: br_pre= (br) ? 1 : 0;
@@ -58,8 +58,8 @@ module PHT_Global (
             case (pht[br_history])
                 2'b00: pht[br_history]<= (br) ? 2'b01 : 2'b00; //强不跳转
                 2'b01: pht[br_history]<= (br) ? 2'b10 : 2'b00; //弱不跳转
-                2'b10: pht[br_history]<= (br) ? 2'b11 : 2'b01; //弱跳�?
-                2'b11: pht[br_history]<= (br) ? 2'b11 : 2'b10; //强跳�?
+                2'b10: pht[br_history]<= (br) ? 2'b11 : 2'b01; //弱跳转
+                2'b11: pht[br_history]<= (br) ? 2'b11 : 2'b10; //强跳转
             endcase
         end
     end
